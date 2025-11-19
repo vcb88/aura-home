@@ -66,10 +66,10 @@ jobs:
               --name $CONTAINER_NAME \
               --restart always \
               --label "traefik.enable=true" \
-              --label "traefik.http.routers.aurahome-insecure.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech`)" \
+              --label "traefik.http.routers.aurahome-insecure.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech\`)" \
               --label "traefik.http.routers.aurahome-insecure.entrypoints=http" \
               --label "traefik.http.routers.aurahome-insecure.middlewares=https-redirect@docker" \
-              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech`)" \
+              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech\`)" \
               --label "traefik.http.routers.aurahome.entrypoints=https" \
               --label "traefik.http.routers.aurahome.tls.certresolver=letsencrypt" \
               --label "traefik.http.services.aurahome-svc.loadbalancer.server.port=80" \
