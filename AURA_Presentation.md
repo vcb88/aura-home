@@ -547,28 +547,21 @@ AURA развивается по чётко спланированной дор�
 
 ---
 
-## Слайд 12: Контакты и Информация
+## Слайд 12: Контакты и Следующие Шаги
 
 ### Свяжитесь с Нами
 
-**Email для партнёрств:**
-partnerships @aura.ai
-
 **Веб-сайт:**
-www.aura-smart-home.com
+www.aurahome.tech
 
-**Телефон:**
-+7 (XXX) XXX-XX-XX
+**Email:**
+hello@aurahome.tech
 
-**Социальные сети:**
-- LinkedIn: /company/aura-smart-home
-- Twitter: @AuraSmartHome
-- YouTube: @AuraSmartHome
+**GitHub:**
+github.com/vcb88/aura-home
 
-**Дополнительные ресурсы:**
-- Документация: docs.aura-smart-home.com
-- GitHub: github.com/aura-smart-home
-- Форум сообщества: community.aura-smart-home.com
+**Telegram-канал:**
+@aurahome
 
 ---
 
