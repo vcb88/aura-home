@@ -3,18 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraHome - Скоро открытие</title>
+    <title>AURA: Интеллектуальный Дом Нового Поколения</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <h1>AuraHome</h1>
-            <p>Скоро здесь будет что-то интересное</p>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">AURA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#problem">Проблема</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#solution">Решение</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">Как это работает</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#use-cases">Примеры</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tech-stack">Технологии</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#roadmap">Дорожная карта</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
+                </ul>
+            </div>
         </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12 text-center">
+                    <h1 class="fw-light">AURA: Интеллектуальный Дом Нового Поколения</h1>
+                    <p class="lead">Трансформируем способ взаимодействия пользователей с домом через искусственный интеллект, проактивность и естественный язык.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Problem Section -->
+        <section id="problem" class="py-5">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Проблема: Почему существующие решения — это технический тупик?</h2>
+                    <hr class="my-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <h3 class="h4 mb-2">Изолированные протоколы</h3>
+                        <p class="text-muted mb-0">Проблемы с совместимостью. Вы вынуждены поддерживать зоопарк стандартов, вместо того чтобы сфокусироваться на продукте.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <h3 class="h4 mb-2">Жесткие сценарии</h3>
+                        <p class="text-muted mb-0">Невозможность масштабирования. Системы, основанные на правилах, становятся экспоненциально сложнее с каждым новым устройством.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <h3 class="h4 mb-2">Примитивные API</h3>
+                        <p class="text-muted mb-0">Ограниченный потенциал. Простые команды "вкл/выкл" не позволяют реализовать по-настоящему сложные и полезные сценарии.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <h3 class="h4 mb-2">Централизованные облака</h3>
+                        <p class="text-muted mb-0">Единая точка отказа. Если у пользователя пропадает интернет, ваш "умный" дом превращается в "тыкву".</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="solution" class="bg-light py-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-heading">Решение AURA: Трансформация Управления Домом</h2>
+                    <hr class="my-4">
+                    <p class="text-muted mb-4">AURA — это революционная платформа, которая превращает фрагментированный умный дом в единую, по-настоящему интеллектуальную систему. Она работает как "мозг" вашего дома, понимая контекст, адаптируясь к вашим привычкам и принимая разумные решения.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works Section -->
+        <section id="how-it-works" class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Как устроена AURA: Три столпа интеллекта</h2>
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <h3 class="h4 mb-2">1. Подключение и Контекст</h3>
+                            <p class="text-muted mb-0">AURA подключается к любым вашим устройствам через Home Assistant и собирает с них данные. Это "глаза и уши" нашего мозга.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <h3 class="h4 mb-2">2. Анализ и Принятие Решений</h3>
+                            <p class="text-muted mb-0">Ядро системы. Мощный AI-агент анализирует ситуацию, понимает намерения пользователя и решает, что нужно делать.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <h3 class="h4 mb-2">3. Оркестрация и Действие</h3>
+                            <p class="text-muted mb-0">AURA координирует работу всех устройств, чтобы выполнить принятое решение. Это "руки" нашего мозга.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section id="use-cases" class="bg-light py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Примеры в Действии: От Команды к Заботе</h2>
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Забота о Качестве Сна</h5>
+                        <p>Ночью датчик CO2 в спальне показывает высокий уровень. AURA замечает это, и утром предлагает: <i>"Доброе утро! Я заметила, что ночью качество воздуха в спальне было неоптимальным. Чтобы улучшить ваш сон, предлагаю каждый вечер проветривать комнату. Сделать это?"</i></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Предиктивное Обслуживание</h5>
+                        <p>Умная розетка стиральной машины фиксирует рост энергопотребления. AURA анализирует это и сообщает: <i>"Я заметила, что ваша стиральная машина стала потреблять больше энергии. Возможно, пора почистить фильтр. Показать вам видео-инструкцию?"</i></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Умная Безопасность</h5>
+                        <p>Ночью срабатывает датчик движения, а жильцов нет дома. AURA мгновенно включает свет, активирует громкий лай собаки через колонки и отправляет на телефон критическое уведомление: <i>"Обнаружено движение в гостиной! Активирован протокол безопасности. Проверьте камеру."</i></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Подготовка к Приходу Гостей</h5>
+                        <p>Пользователь говорит: <i>"Аура, ко мне через час придут гости"</i>. AURA запускает комплексный сценарий: проверяет, закончил ли робот-пылесос уборку, устанавливает комфортную температуру, включает очиститель воздуха и настраивает уютное освещение.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section id="tech-stack" class="py-5">
+            <div class="container text-center">
+                <h2 class="section-heading">Технологический стек</h2>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-4"><span>Python</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>FastAPI</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>PostgreSQL</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>Redis</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>Docker</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>LangChain</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>Home Assistant</span></div>
+                    <div class="col-md-3 col-sm-6 mb-4"><span>GitHub Actions</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="bg-light py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Дорожная Карта</h2>
+                        <hr class="my-4">
+                    </div>
+                </div>
+                <div class="row">
+                   <div class="col-md-4 text-center">
+                       <h5>Фаза 1: MVP (Q1 2026)</h5>
+                       <p>Запуск базового оркестратора с ограниченными AI-функциями.</p>
+                   </div>
+                   <div class="col-md-4 text-center">
+                       <h5>Фаза 2: Расширение (Q2-Q3 2026)</h5>
+                       <p>Интеграция VLM, Matter, HomeKit. Предиктивное обслуживание.</p>
+                   </div>
+                   <div class="col-md-4 text-center">
+                       <h5>Фаза 3: Мультиагентная Система (2026-2027)</h5>
+                       <p>Открытая экосистема, интеграция с внешними сервисами.</p>
+                   </div>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <!-- Footer -->
+    <footer id="contact" class="py-5 bg-dark">
+        <div class="container text-center text-white">
+            <h2 class="section-heading">Контакты</h2>
+             <p>
+                <a href="mailto:hello@aurahome.tech">hello@aurahome.tech</a> | 
+                <a href="https://github.com/vcb88/aura-home">GitHub</a> | 
+                <a href="https://t.me/aurahome">Telegram</a>
+            </p>
+            <p class="mt-4"><small>Copyright &copy; AURA 2025</small></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
