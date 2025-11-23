@@ -8,7 +8,7 @@ COPY . .
 FROM nginx:stable-alpine
 
 # Copy the static files from the builder stage
-COPY --from=builder /source /usr/share/nginx/html
+COPY --from=builder /source/landing /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
