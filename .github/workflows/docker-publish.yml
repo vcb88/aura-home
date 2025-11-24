@@ -43,9 +43,11 @@ jobs:
       - name: Deploy to Server with Traefik
         uses: appleboy/ssh-action@master
         with:
+
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: 2222
+          key: ${{ secrets.REMOTE_SSH_KEY }}          
           script: |
             IMAGE_NAME="${{ env.IMAGE_NAME }}:latest"
             CONTAINER_NAME="aurahome"
