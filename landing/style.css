@@ -278,3 +278,47 @@ footer a:hover {
 .card-problem-content h3 {
     margin-bottom: 0.5rem;
 }
+
+/* --- Timeline for Roadmap --- */
+.timeline-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-top: 4rem;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 5px; /* Vertically center with the marker */
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--aura-neon-blue);
+    box-shadow: 0 0 10px var(--aura-neon-blue);
+    border-radius: 2px;
+}
+
+.timeline-phase {
+    flex: 1;
+    padding: 0 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.timeline-marker {
+    position: absolute;
+    top: -2px; /* Position on the line */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: var(--aura-dark-blue);
+    border: 3px solid var(--aura-neon-blue);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-content {
+    margin-top: 30px; /* Space below the line */
+}
