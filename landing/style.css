@@ -66,6 +66,14 @@ h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
     text-transform: uppercase;
 }
 
+.masthead h1 .text-subtitle-h1 {
+    font-size: 0.5em; /* Approximately half the size of the parent h1 */
+    font-weight: 700; /* Slightly less bold */
+    display: block; /* Ensures it goes to a new line */
+    margin-top: 0.2em; /* Small space above it */
+    line-height: 1.2; /* Adjust line height for smaller text */
+}
+
 .lead {
     font-size: 1.3rem;
     font-weight: 300;
