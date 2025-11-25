@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/vcb88/aura-home
-  APP_DIR: /var/www/aurahome
 
 jobs:
   build_and_push:
@@ -33,7 +32,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.IMAGE_NAME }}:latest
 
   deploy:
     needs: build_and_push
@@ -41,56 +40,39 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Deploy to Server
+      - name: Deploy to Server with Traefik
         uses: appleboy/ssh-action@master
         with:
+
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           port: 2222
           key: ${{ secrets.REMOTE_SSH_KEY }}          
           script: |
-            IMAGE_TAG="${{ github.sha }}"
-            IMAGE_NAME="${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
+            IMAGE_NAME="${{ env.IMAGE_NAME }}:latest"
             CONTAINER_NAME="aurahome"
             
             echo "--- Deploying AuraHome ---"
-            echo "Image: $IMAGE_NAME"
-            echo "Container: $CONTAINER_NAME"
-            
-            echo "--- Logging in to registry ---"
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            echo "--- Pulling new image ---"
+            echo "Pulling latest image..."
             docker pull $IMAGE_NAME
-
-            echo "--- Preparing content with version info ---"
-            SHORT_SHA=$(echo $IMAGE_TAG | head -c 7)
-            BUILD_DATE=$(date +'%Y-%m-%d %H:%M')
-            # Ensure the app directory exists and is clean
-            rm -rf ${{ env.APP_DIR }}
-            mkdir -p ${{ env.APP_DIR }}
-            # Create a temporary container to copy files from
-            TEMP_CONTAINER_ID=$(docker create $IMAGE_NAME)
-            # Copy all landing page content from the container to the host
-            docker cp $TEMP_CONTAINER_ID:/usr/share/nginx/html/. ${{ env.APP_DIR }}
-            docker rm $TEMP_CONTAINER_ID
-            # Replace placeholders in the copied index.html
-            sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/index.html
-            sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/index.html
             
-            echo "--- Stopping and removing old container ---"
+            echo "Stopping and removing old container..."
             docker stop $CONTAINER_NAME || true
             docker rm $CONTAINER_NAME || true
 
-            echo "--- Starting new container with modified content ---"
+            echo "Starting new container..."
             docker run -d \
               --network proxy \
               --name $CONTAINER_NAME \
               --restart always \
-              -v ${{ env.APP_DIR }}:/usr/share/nginx/html \
               --label "traefik.enable=true" \
-              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`, \`www.aurahome.tech\`)" \
-              --label "traefik.http.routers.aurahome.entrypoints=websecure" \
+              --label "traefik.http.routers.aurahome-insecure.rule=Host(\`aurahome.tech\') || Host(\`www.aurahome.tech\')" \
+              --label "traefik.http.routers.aurahome-insecure.entrypoints=http" \
+              --label "traefik.http.routers.aurahome-insecure.middlewares=https-redirect@docker" \
+              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\') || Host(\`www.aurahome.tech\')" \
+              --label "traefik.http.routers.aurahome.entrypoints=https" \
               --label "traefik.http.routers.aurahome.tls.certresolver=letsencrypt" \
               --label "traefik.http.services.aurahome-svc.loadbalancer.server.port=80" \
               $IMAGE_NAME
