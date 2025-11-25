@@ -1,6 +1,6 @@
 :root {
     --aura-dark-blue: #111827;
-    --aura-dark-gray: #1F2937; /* A slightly lighter dark for backgrounds */
+    --aura-dark-gray: #1F2937; /* For card backgrounds */
     --aura-neon-blue: #22d3ee;
     --aura-light-gray: #E5E7EB;
     --aura-medium-gray: #9CA3AF;
@@ -14,30 +14,32 @@ body {
     padding-top: 56px;
     background-color: var(--aura-dark-blue);
     color: var(--aura-light-gray);
-    font-size: 1.1rem; /* Increased base font size */
+    font-size: 1.1rem;
     line-height: 1.7;
 }
 
-h1, .h1 {
-    font-size: calc(1.475rem + 2.7vw); /* Larger responsive H1 */
+h1, .h1, h2, .h2, .section-heading {
+    color: var(--aura-white);
+    font-weight: 700;
 }
 
-h2, .h2 {
-    font-size: calc(1.325rem + 0.9vw); /* Larger responsive H2 */
+h3, .h3, h5, .h5 {
+    color: var(--aura-neon-blue);
+    font-weight: 700;
 }
 
-h3, .h3 {
-    font-size: calc(1.25rem + 0.6vw); /* Larger responsive H3 */
-}
+h1, .h1 { font-size: calc(1.475rem + 2.7vw); }
+h2, .h2, .section-heading { font-size: calc(1.325rem + 0.9vw); }
+h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
 
 .masthead h1 {
     font-size: calc(1.6rem + 4.5vw);
-    font-weight: 700;
 }
 
 .lead {
     font-size: 1.3rem;
     font-weight: 300;
+    color: var(--aura-light-gray);
 }
 
 .text-detail {
@@ -46,11 +48,8 @@ h3, .h3 {
     font-weight: 300;
 }
 
-.section-heading {
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--aura-white);
-    margin-bottom: 1.5rem;
+.text-muted {
+    color: var(--aura-medium-gray) !important;
 }
 
 /* --- Layout & Spacing --- */
@@ -85,7 +84,6 @@ hr.my-4 {
 }
 
 .masthead .lead {
-    color: var(--aura-light-gray);
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -94,14 +92,6 @@ hr.my-4 {
 /* --- Bootstrap Overrides --- */
 .bg-dark {
     background-color: var(--aura-dark-blue) !important;
-}
-
-.bg-light {
-    background-color: var(--aura-dark-gray) !important;
-}
-
-.text-muted {
-    color: var(--aura-medium-gray) !important;
 }
 
 /* --- Navigation --- */
@@ -115,8 +105,7 @@ hr.my-4 {
     font-size: 1.5rem;
 }
 
-.navbar-dark .navbar-brand:hover,
-.navbar-dark .navbar-brand:focus {
+.navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
     color: var(--aura-neon-blue);
 }
 
@@ -124,8 +113,7 @@ hr.my-4 {
     color: var(--aura-light-gray);
 }
 
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
     color: var(--aura-neon-blue);
 }
 
@@ -142,24 +130,33 @@ hr.my-4 {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2834, 211, 238, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-
-/* --- Sections --- */
-#problem .mt-5, #how-it-works .mt-5 {
-    padding: 1rem;
+/* --- Feature Card Styling --- */
+.card-feature {
+    background-color: var(--aura-dark-gray);
+    padding: 2.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1f2937;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
 }
 
-#problem h3, #how-it-works h3 {
-    margin-bottom: 1rem !important;
+.card-feature:hover {
+    transform: translateY(-5px);
+    border-color: var(--aura-neon-blue);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
 }
 
-#use-cases .col-md-6 {
-    margin-bottom: 3rem;
+.card-feature h3 {
+    margin-bottom: 1rem;
 }
 
-#use-cases h5 {
-    color: var(--aura-neon-blue);
-    font-weight: 700;
-    margin-bottom: 0.75rem;
+/* Use Case Card Styling */
+.card-use-case {
+    background-color: var(--aura-dark-gray);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    height: 100%;
+    margin-bottom: 2rem;
 }
 
 #tech-stack span {
@@ -179,7 +176,6 @@ hr.my-4 {
     color: var(--aura-neon-blue);
     transform: translateY(-2px);
 }
-
 
 /* --- Footer --- */
 footer {
