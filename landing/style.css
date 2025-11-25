@@ -8,6 +8,24 @@
     --aura-gradient-start: rgba(30, 58, 138, 0.3);
 }
 
+/* --- Scroll Snap --- */
+html {
+    scroll-snap-type: y mandatory;
+}
+
+body, html {
+    overflow-x: hidden; /* Prevent horizontal scrollbars */
+}
+
+header, section, footer {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
 /* --- Base & Typography --- */
 body {
     font-family: 'Manrope', sans-serif;
@@ -150,6 +168,32 @@ hr.my-4 {
     margin-bottom: 1rem;
 }
 
+/* --- Problem Card (Horizontal) --- */
+.card-problem-horizontal {
+    display: flex;
+    align-items: flex-start;
+    background-color: var(--aura-dark-gray);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1f2937;
+    transition: all 0.3s ease-in-out;
+}
+.card-problem-horizontal:hover {
+    transform: translateY(-5px);
+    border-color: var(--aura-neon-blue);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+}
+.card-problem-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    margin-right: 2rem;
+    color: var(--aura-neon-blue);
+}
+.card-problem-content h3 {
+    margin-bottom: 0.5rem;
+}
+
 /* Use Case Card Styling */
 .card-use-case {
     background-color: var(--aura-dark-gray);
@@ -180,8 +224,6 @@ hr.my-4 {
 /* --- Footer --- */
 footer {
     background-color: var(--aura-dark-gray) !important;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
 }
 
 footer a {
