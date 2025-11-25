@@ -7,15 +7,16 @@
     --aura-white: #FFFFFF;
     --aura-gradient-start: rgba(30, 58, 138, 0.3);
 
-    /* --- FONT PALETTE FOR REVIEW --- */
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --font-subheading: 'Nunito Sans', sans-serif;
-    --font-detail: 'Source Sans Pro', sans-serif;
-    --font-brand: 'Jost', sans-serif;
-    --font-alt-1: 'Roboto', sans-serif;
-    --font-alt-2: 'Open Sans', sans-serif;
-    --font-tech: 'Manrope', sans-serif; /* Keep Manrope for comparison */
+    /* --- FONT PALETTE FOR REVIEW (ROUND 2) --- */
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Geologica', sans-serif;
+    --font-subheading: 'Exo 2', sans-serif;
+    --font-detail: 'IBM Plex Sans', sans-serif;
+    --font-brand: 'Tektur', sans-serif;
+    --font-alt-1: 'Overpass', sans-serif; /* For Use Cases */
+    --font-alt-2: 'Geologica', sans-serif; /* For Lead, same as body */
+    --font-tech: 'IBM Plex Mono', monospace;
+    --font-display: 'Orbitron', sans-serif;
 }
 
 /* --- Scroll Snap --- */
@@ -37,7 +38,7 @@ header, section, footer {
 
 /* --- Base & Typography --- */
 body {
-    font-family: var(--font-body); /* Body: Inter */
+    font-family: var(--font-body); /* Body: Geologica */
     padding-top: 56px;
     background-color: var(--aura-dark-blue);
     color: var(--aura-light-gray);
@@ -46,13 +47,13 @@ body {
 }
 
 h1, .h1, h2, .h2, .section-heading {
-    font-family: var(--font-heading); /* Headings: Montserrat */
+    font-family: var(--font-heading); /* Headings: Space Grotesk */
     color: var(--aura-white);
     font-weight: 700;
 }
 
 h3, .h3, h5, .h5 {
-    font-family: var(--font-subheading); /* Sub-headings: Nunito Sans */
+    font-family: var(--font-subheading); /* Sub-headings: Exo 2 */
     color: var(--aura-neon-blue);
     font-weight: 700;
 }
@@ -62,18 +63,21 @@ h2, .h2, .section-heading { font-size: calc(1.325rem + 0.9vw); }
 h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
 
 .masthead h1 {
+    font-family: var(--font-display); /* Display: Orbitron */
     font-size: calc(1.6rem + 4.5vw);
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .lead {
-    font-family: var(--font-alt-2); /* Lead Paragraphs: Open Sans */
+    font-family: var(--font-alt-2); /* Lead Paragraphs: Geologica */
     font-size: 1.3rem;
     font-weight: 300;
     color: var(--aura-light-gray);
 }
 
 .text-detail {
-    font-family: var(--font-detail); /* Detail Text: Source Sans Pro */
+    font-family: var(--font-detail); /* Detail Text: IBM Plex Sans */
     font-size: 0.9rem;
     color: var(--aura-medium-gray);
     font-weight: 400;
@@ -85,7 +89,7 @@ h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
 
 /* Use Case section paragraphs get a different font for testing */
 #use-cases p {
-    font-family: var(--font-alt-1); /* Alt Body: Roboto */
+    font-family: var(--font-alt-1); /* Alt Body: Overpass */
 }
 
 
@@ -137,7 +141,7 @@ hr.my-4 {
 }
 
 .navbar-dark .navbar-brand {
-    font-family: var(--font-brand); /* Brand Font: Jost */
+    font-family: var(--font-brand); /* Brand Font: Tektur */
     color: var(--aura-white);
     font-weight: 700;
     font-size: 1.5rem;
@@ -204,7 +208,7 @@ hr.my-4 {
 }
 
 #tech-stack span {
-    font-family: var(--font-tech); /* Tech Stack: Manrope */
+    font-family: var(--font-tech); /* Tech Stack: IBM Plex Mono */
     display: inline-block;
     padding: 0.6rem 1.2rem;
     border: 1px solid var(--aura-dark-gray);
