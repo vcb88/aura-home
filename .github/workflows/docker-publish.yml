@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/vcb88/aura-home
-  APP_DIR: /var/www/aurahome
 
 jobs:
   build_and_push:
@@ -27,6 +26,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set build-time variables
+        id: vars
+        run: |
+          echo "COMMIT_SHA=$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+          echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
@@ -34,6 +39,9 @@ jobs:
           context: .
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          build-args: |
+            COMMIT_SHA=${{ steps.vars.outputs.COMMIT_SHA }}
+            BUILD_DATE=${{ steps.vars.outputs.BUILD_DATE }}
 
   deploy:
     needs: build_and_push
@@ -62,35 +70,22 @@ jobs:
 
             echo "--- Pulling new image ---"
             docker pull $IMAGE_NAME
-
-            echo "--- Preparing content with version info ---"
-            SHORT_SHA=$(echo $IMAGE_TAG | head -c 7)
-            BUILD_DATE=$(date +'%Y-%m-%d %H:%M')
-            # Ensure the app directory exists and is clean
-            rm -rf ${{ env.APP_DIR }}
-            mkdir -p ${{ env.APP_DIR }}
-            # Create a temporary container to copy files from
-            TEMP_CONTAINER_ID=$(docker create $IMAGE_NAME)
-            # Copy all landing page content from the container to the host
-            docker cp $TEMP_CONTAINER_ID:/usr/share/nginx/html/. ${{ env.APP_DIR }}
-            docker rm $TEMP_CONTAINER_ID
-            # Replace placeholders in the copied index.html
-            sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/index.html
-            sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/index.html
             
             echo "--- Stopping and removing old container ---"
             docker stop $CONTAINER_NAME || true
             docker rm $CONTAINER_NAME || true
 
-            echo "--- Starting new container with modified content ---"
+            echo "--- Starting new container ---"
             docker run -d \
               --network proxy \
               --name $CONTAINER_NAME \
               --restart always \
-              -v ${{ env.APP_DIR }}:/usr/share/nginx/html \
               --label "traefik.enable=true" \
+              --label 'traefik.http.routers.aurahome-insecure.rule=Host(`aurahome.tech`) || Host(`www.aurahome.tech`)' \
+              --label "traefik.http.routers.aurahome-insecure.entrypoints=http" \
+              --label "traefik.http.routers.aurahome-insecure.middlewares=https-redirect@docker" \
               --label 'traefik.http.routers.aurahome.rule=Host(`aurahome.tech`) || Host(`www.aurahome.tech`)' \
-              --label "traefik.http.routers.aurahome.entrypoints=websecure" \
+              --label "traefik.http.routers.aurahome.entrypoints=https" \
               --label "traefik.http.routers.aurahome.tls.certresolver=letsencrypt" \
               --label "traefik.http.services.aurahome-svc.loadbalancer.server.port=80" \
               $IMAGE_NAME
