@@ -52,6 +52,7 @@ h1, .h1, h2, .h2, h3, .h3, h5, .h5, .section-heading {
 
 h3, .h3, h5, .h5 {
     color: var(--aura-neon-blue);
+    font-weight: 700;
 }
 
 h1, .h1 { font-size: calc(1.475rem + 2.7vw); }
@@ -217,12 +218,23 @@ hr.my-4 {
 /* --- Footer --- */
 footer {
     background-color: var(--aura-dark-gray) !important;
+    padding-top: 6rem; /* Increased vertical padding */
+    padding-bottom: 6rem; /* Increased vertical padding */
+}
+
+footer .section-heading {
+    margin-bottom: 2rem; /* More space below heading */
+}
+
+footer p {
+    margin-bottom: 1.5rem; /* More space for paragraphs */
 }
 
 footer a {
     color: var(--aura-neon-blue);
     text-decoration: none;
     transition: color 0.2s;
+    margin: 0 1.5rem; /* Increased horizontal spacing */
 }
 
 footer a:hover {
