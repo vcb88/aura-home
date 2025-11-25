@@ -105,11 +105,43 @@
         <!-- Solution Section -->
         <section id="solution">
             <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
+                <div class="col-lg-12 mx-auto text-center">
                     <div class="interactive-card text-center">
                         <h2 class="section-heading">Решение AURAhome: Трансформация Управления Домом</h2>
                         <hr class="my-4">
                         <p class="lead mb-4">AURAhome — это революционная платформа, которая превращает фрагментированный интеллектуальный дом в единую, по-настоящему интеллектуальную систему. Она работает как "мозг" вашего дома, понимая контекст, адаптируясь к вашим привычкам и принимая разумные решения.</p>
+
+                    <h4 class="mt-5 text-center" style="color: var(--aura-neon-blue);">Программное Обеспечение AURAhome</h4>
+                    <p class="text-muted mb-4 text-center">Все перечисленное ПО является Open Source и будет установлено на сервер, преимущественно в виде Docker-контейнеров для изоляции и простоты управления.</p>
+
+                    <ul class="list-unstyled text-start mx-auto" style="max-width: 800px;">
+                        <li class="mb-3">
+                            <h5 style="color: var(--aura-light-gray);">Операционная система:</h5>
+                            <p class="text-detail mb-0">Рекомендация: <strong>Debian 12</strong> или <strong>Ubuntu Server 22.04 LTS</strong>. Стабильные и надежные дистрибутивы Linux.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5 style="color: var(--aura-light-gray);">Система контейнеризации:</h5>
+                            <p class="text-detail mb-0"><strong>Docker</strong> и <strong>Docker Compose</strong>. Стандарт де-факто для управления контейнеризированными приложениями.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5 style="color: var(--aura-light-gray);">Платформа Умного Дома:</h5>
+                            <p class="text-detail mb-0"><strong>Home Assistant</strong>. Будет установлен как Docker-контейнер. Это наша основа для взаимодействия с устройствами.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5 style="color: var(--aura-light-gray);">Стек Вспомогательных Сервисов (также в Docker):</h5>
+                            <ul class="list-unstyled ms-4">
+                                <li><p class="text-detail mb-0"><strong>MQTT Брокер: Mosquitto</strong>. Популярный и легковесный брокер для обмена сообщениями между сервисами и устройствами.</p></li>
+                                <li><p class="text-detail mb-0"><strong>Zigbee-интеграция: Zigbee2MQTT</strong>. Позволяет "прокинуть" Zigbee-устройства в Home Assistant через MQTT.</p></li>
+                                <li><p class="text-detail mb-0"><strong>Базы данных:</strong></p>
+                                    <ul class="list-unstyled ms-4">
+                                        <li><p class="text-detail mb-0"><strong>PostgreSQL</strong> с расширениями <strong>TimescaleDB</strong> (для истории) и <strong>PGVector</strong> (для семантической памяти).</p></li>
+                                        <li><p class="text-detail mb-0"><strong>Redis</strong> (для кэша и краткосрочной памяти).</p></li>
+                                    </ul>
+                                </li>
+                                <li><p class="text-detail mb-0"><strong>Локальный AI-сервер: Ollama</strong>. Для запуска и взаимодействия с языковыми моделями локально.</p></li>
+                            </ul>
+                        </li>
+                    </ul>
                     </div>
                 </div>
             </div>
