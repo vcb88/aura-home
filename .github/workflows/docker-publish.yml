@@ -60,19 +60,19 @@ jobs:
             echo "--- Logging in to registry ---"
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+            echo "Pulling latest image..."
+            docker pull $IMAGE_NAME
+
             echo "--- Preparing index.html with version info ---"
             SHORT_SHA=$(echo $IMAGE_TAG | head -c 7)
             BUILD_DATE=$(date +'%Y-%m-%d %H:%M')
             # Create a temporary directory for the landing page files
-            mkdir -p ${{ env.APP_DIR }}/landing
-            # Copy the base index.html
-            docker run --rm --entrypoint cat $IMAGE_NAME /app/landing/index.html > ${{ env.APP_DIR }}/landing/index.html
+            mkdir -p ${{ env.APP_DIR }}
+            # Copy the base index.html from the container
+            docker run --rm --entrypoint cat $IMAGE_NAME /usr/share/nginx/html/index.html > ${{ env.APP_DIR }}/index.html
             # Replace placeholders
-            sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/landing/index.html
-            sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/landing/index.html
-            
-            echo "Pulling latest image..."
-            docker pull $IMAGE_NAME
+            sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/index.html
+            sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/index.html
             
             echo "Stopping and removing old container..."
             docker stop $CONTAINER_NAME || true
@@ -83,7 +83,7 @@ jobs:
               --network proxy \
               --name $CONTAINER_NAME \
               --restart always \
-              -v ${{ env.APP_DIR }}/landing/index.html:/app/landing/index.html \
+              -v ${{ env.APP_DIR }}/index.html:/usr/share/nginx/html/index.html \
               --label "traefik.enable=true" \
               --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`, \`www.aurahome.tech\`)" \
               --label "traefik.http.routers.aurahome.entrypoints=websecure" \
