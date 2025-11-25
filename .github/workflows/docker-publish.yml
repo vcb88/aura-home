@@ -7,6 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/vcb88/aura-home
+  APP_DIR: /var/www/aurahome
 
 jobs:
   build_and_push:
@@ -32,7 +33,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     needs: build_and_push
@@ -40,21 +41,36 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Deploy to Server with Traefik
+      - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
-
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           port: 2222
           key: ${{ secrets.REMOTE_SSH_KEY }}          
           script: |
-            IMAGE_NAME="${{ env.IMAGE_NAME }}:latest"
+            IMAGE_TAG="${{ github.sha }}"
+            IMAGE_NAME="${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
             CONTAINER_NAME="aurahome"
             
             echo "--- Deploying AuraHome ---"
+            echo "Image: $IMAGE_NAME"
+            echo "Container: $CONTAINER_NAME"
+            
+            echo "--- Logging in to registry ---"
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+            echo "--- Preparing index.html with version info ---"
+            SHORT_SHA=$(echo $IMAGE_TAG | head -c 7)
+            BUILD_DATE=$(date +'%Y-%m-%d %H:%M')
+            # Create a temporary directory for the landing page files
+            mkdir -p ${{ env.APP_DIR }}/landing
+            # Copy the base index.html
+            docker run --rm --entrypoint cat $IMAGE_NAME /app/landing/index.html > ${{ env.APP_DIR }}/landing/index.html
+            # Replace placeholders
+            sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/landing/index.html
+            sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/landing/index.html
+            
             echo "Pulling latest image..."
             docker pull $IMAGE_NAME
             
@@ -62,17 +78,15 @@ jobs:
             docker stop $CONTAINER_NAME || true
             docker rm $CONTAINER_NAME || true
 
-            echo "Starting new container..."
+            echo "Starting new container with modified index.html..."
             docker run -d \
               --network proxy \
               --name $CONTAINER_NAME \
               --restart always \
+              -v ${{ env.APP_DIR }}/landing/index.html:/app/landing/index.html \
               --label "traefik.enable=true" \
-              --label "traefik.http.routers.aurahome-insecure.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech\`)" \
-              --label "traefik.http.routers.aurahome-insecure.entrypoints=http" \
-              --label "traefik.http.routers.aurahome-insecure.middlewares=https-redirect@docker" \
-              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`) || Host(\`www.aurahome.tech\`)" \
-              --label "traefik.http.routers.aurahome.entrypoints=https" \
+              --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`, \`www.aurahome.tech\`)" \
+              --label "traefik.http.routers.aurahome.entrypoints=websecure" \
               --label "traefik.http.routers.aurahome.tls.certresolver=letsencrypt" \
               --label "traefik.http.services.aurahome-svc.loadbalancer.server.port=80" \
               $IMAGE_NAME
