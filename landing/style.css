@@ -7,16 +7,10 @@
     --aura-white: #FFFFFF;
     --aura-gradient-start: rgba(30, 58, 138, 0.3);
 
-    /* --- FONT PALETTE FOR REVIEW (ROUND 2) --- */
-    --font-heading: 'Space Grotesk', sans-serif;
-    --font-body: 'Geologica', sans-serif;
-    --font-subheading: 'Exo 2', sans-serif;
-    --font-detail: 'IBM Plex Sans', sans-serif;
-    --font-brand: 'Tektur', sans-serif;
-    --font-alt-1: 'Overpass', sans-serif; /* For Use Cases */
-    --font-alt-2: 'Geologica', sans-serif; /* For Lead, same as body */
-    --font-tech: 'IBM Plex Mono', monospace;
+    /* --- FINAL FONT PALETTE --- */
     --font-display: 'Orbitron', sans-serif;
+    --font-heading: 'Exo 2', sans-serif;
+    --font-body: 'Overpass', sans-serif;
 }
 
 /* --- Scroll Snap --- */
@@ -38,7 +32,7 @@ header, section, footer {
 
 /* --- Base & Typography --- */
 body {
-    font-family: var(--font-body); /* Body: Geologica */
+    font-family: var(--font-body);
     padding-top: 56px;
     background-color: var(--aura-dark-blue);
     color: var(--aura-light-gray);
@@ -46,16 +40,18 @@ body {
     line-height: 1.7;
 }
 
-h1, .h1, h2, .h2, .section-heading {
-    font-family: var(--font-heading); /* Headings: Space Grotesk */
+p {
+    font-family: var(--font-body);
+}
+
+h1, .h1, h2, .h2, h3, .h3, h5, .h5, .section-heading {
+    font-family: var(--font-heading);
     color: var(--aura-white);
     font-weight: 700;
 }
 
 h3, .h3, h5, .h5 {
-    font-family: var(--font-subheading); /* Sub-headings: Exo 2 */
     color: var(--aura-neon-blue);
-    font-weight: 700;
 }
 
 h1, .h1 { font-size: calc(1.475rem + 2.7vw); }
@@ -63,35 +59,27 @@ h2, .h2, .section-heading { font-size: calc(1.325rem + 0.9vw); }
 h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
 
 .masthead h1 {
-    font-family: var(--font-display); /* Display: Orbitron */
+    font-family: var(--font-display);
     font-size: calc(1.6rem + 4.5vw);
     font-weight: 900;
     text-transform: uppercase;
 }
 
 .lead {
-    font-family: var(--font-alt-2); /* Lead Paragraphs: Geologica */
     font-size: 1.3rem;
     font-weight: 300;
     color: var(--aura-light-gray);
 }
 
 .text-detail {
-    font-family: var(--font-detail); /* Detail Text: IBM Plex Sans */
     font-size: 0.9rem;
     color: var(--aura-medium-gray);
-    font-weight: 400;
+    font-weight: 300; /* Lighter weight for detail text */
 }
 
 .text-muted {
     color: var(--aura-medium-gray) !important;
 }
-
-/* Use Case section paragraphs get a different font for testing */
-#use-cases p {
-    font-family: var(--font-alt-1); /* Alt Body: Overpass */
-}
-
 
 /* --- Layout & Spacing --- */
 section {
@@ -141,7 +129,7 @@ hr.my-4 {
 }
 
 .navbar-dark .navbar-brand {
-    font-family: var(--font-brand); /* Brand Font: Tektur */
+    font-family: var(--font-display); /* Use display font for brand */
     color: var(--aura-white);
     font-weight: 700;
     font-size: 1.5rem;
@@ -208,7 +196,7 @@ hr.my-4 {
 }
 
 #tech-stack span {
-    font-family: var(--font-tech); /* Tech Stack: IBM Plex Mono */
+    font-family: var(--font-body);
     display: inline-block;
     padding: 0.6rem 1.2rem;
     border: 1px solid var(--aura-dark-gray);
