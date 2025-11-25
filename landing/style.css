@@ -217,9 +217,7 @@ hr.my-4 {
 
 /* --- Footer --- */
 footer {
-    background-color: var(--aura-dark-gray) !important;
-    padding-top: 6rem; /* Increased vertical padding */
-    padding-bottom: 6rem; /* Increased vertical padding */
+    /* The background is now handled by the card inside */
 }
 
 footer .section-heading {
