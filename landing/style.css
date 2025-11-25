@@ -185,8 +185,13 @@ hr.my-4 {
     box-shadow: 0 0 25px rgba(34, 211, 238, 0.25);
 }
 
-.interactive-card h3, .interactive-card h5 {
+.interactive-card h3 {
     margin-bottom: 1rem;
+}
+
+.interactive-card h5 {
+    margin-bottom: 1rem;
+    font-size: 1.6rem; /* Increased font size */
 }
 
 /* Horizontal variation for the problem section */
