@@ -60,30 +60,34 @@ jobs:
             echo "--- Logging in to registry ---"
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            echo "Pulling latest image..."
+            echo "--- Pulling new image ---"
             docker pull $IMAGE_NAME
 
-            echo "--- Preparing index.html with version info ---"
+            echo "--- Preparing content with version info ---"
             SHORT_SHA=$(echo $IMAGE_TAG | head -c 7)
             BUILD_DATE=$(date +'%Y-%m-%d %H:%M')
-            # Create a temporary directory for the landing page files
+            # Ensure the app directory exists and is clean
+            rm -rf ${{ env.APP_DIR }}
             mkdir -p ${{ env.APP_DIR }}
-            # Copy the base index.html from the container
-            docker run --rm --entrypoint cat $IMAGE_NAME /usr/share/nginx/html/index.html > ${{ env.APP_DIR }}/index.html
-            # Replace placeholders
+            # Create a temporary container to copy files from
+            TEMP_CONTAINER_ID=$(docker create $IMAGE_NAME)
+            # Copy all landing page content from the container to the host
+            docker cp $TEMP_CONTAINER_ID:/usr/share/nginx/html/. ${{ env.APP_DIR }}
+            docker rm $TEMP_CONTAINER_ID
+            # Replace placeholders in the copied index.html
             sed -i "s|__COMMIT_SHA__|$SHORT_SHA|g" ${{ env.APP_DIR }}/index.html
             sed -i "s|__BUILD_DATE__|$BUILD_DATE|g" ${{ env.APP_DIR }}/index.html
             
-            echo "Stopping and removing old container..."
+            echo "--- Stopping and removing old container ---"
             docker stop $CONTAINER_NAME || true
             docker rm $CONTAINER_NAME || true
 
-            echo "Starting new container with modified index.html..."
+            echo "--- Starting new container with modified content ---"
             docker run -d \
               --network proxy \
               --name $CONTAINER_NAME \
               --restart always \
-              -v ${{ env.APP_DIR }}/index.html:/usr/share/nginx/html/index.html \
+              -v ${{ env.APP_DIR }}:/usr/share/nginx/html \
               --label "traefik.enable=true" \
               --label "traefik.http.routers.aurahome.rule=Host(\`aurahome.tech\`, \`www.aurahome.tech\`)" \
               --label "traefik.http.routers.aurahome.entrypoints=websecure" \
