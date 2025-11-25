@@ -6,6 +6,16 @@
     --aura-medium-gray: #9CA3AF;
     --aura-white: #FFFFFF;
     --aura-gradient-start: rgba(30, 58, 138, 0.3);
+
+    /* --- FONT PALETTE FOR REVIEW --- */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-subheading: 'Nunito Sans', sans-serif;
+    --font-detail: 'Source Sans Pro', sans-serif;
+    --font-brand: 'Jost', sans-serif;
+    --font-alt-1: 'Roboto', sans-serif;
+    --font-alt-2: 'Open Sans', sans-serif;
+    --font-tech: 'Manrope', sans-serif; /* Keep Manrope for comparison */
 }
 
 /* --- Scroll Snap --- */
@@ -27,7 +37,7 @@ header, section, footer {
 
 /* --- Base & Typography --- */
 body {
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--font-body); /* Body: Inter */
     padding-top: 56px;
     background-color: var(--aura-dark-blue);
     color: var(--aura-light-gray);
@@ -36,11 +46,13 @@ body {
 }
 
 h1, .h1, h2, .h2, .section-heading {
+    font-family: var(--font-heading); /* Headings: Montserrat */
     color: var(--aura-white);
     font-weight: 700;
 }
 
 h3, .h3, h5, .h5 {
+    font-family: var(--font-subheading); /* Sub-headings: Nunito Sans */
     color: var(--aura-neon-blue);
     font-weight: 700;
 }
@@ -54,20 +66,28 @@ h3, .h3 { font-size: calc(1.25rem + 0.6vw); }
 }
 
 .lead {
+    font-family: var(--font-alt-2); /* Lead Paragraphs: Open Sans */
     font-size: 1.3rem;
     font-weight: 300;
     color: var(--aura-light-gray);
 }
 
 .text-detail {
+    font-family: var(--font-detail); /* Detail Text: Source Sans Pro */
     font-size: 0.9rem;
     color: var(--aura-medium-gray);
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .text-muted {
     color: var(--aura-medium-gray) !important;
 }
+
+/* Use Case section paragraphs get a different font for testing */
+#use-cases p {
+    font-family: var(--font-alt-1); /* Alt Body: Roboto */
+}
+
 
 /* --- Layout & Spacing --- */
 section {
@@ -117,6 +137,7 @@ hr.my-4 {
 }
 
 .navbar-dark .navbar-brand {
+    font-family: var(--font-brand); /* Brand Font: Jost */
     color: var(--aura-white);
     font-weight: 700;
     font-size: 1.5rem;
@@ -183,6 +204,7 @@ hr.my-4 {
 }
 
 #tech-stack span {
+    font-family: var(--font-tech); /* Tech Stack: Manrope */
     display: inline-block;
     padding: 0.6rem 1.2rem;
     border: 1px solid var(--aura-dark-gray);
