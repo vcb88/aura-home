@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Cyberpunk Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #0d0208;
+            color: #39ff14;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scanlines Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0) 50%,
+                rgba(0, 0, 0, 0.5) 51%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlineMove 8s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 4px; }
+        }
+
+        /* Matrix Rain Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        /* HUD Frame */
+        .hud-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #39ff14;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #ff0a54;
+        }
+
+        .hud-corner.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .hud-corner.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .hud-corner.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .hud-corner.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 2, 8, 0.9);
+            border-bottom: 2px solid #39ff14;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #39ff14;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .logo-terminal {
+            font-size: 24px;
+            color: #ff0a54;
+            text-shadow: 0 0 10px #ff0a54;
+        }
+
+        /* Side Navigation */
+        .side-nav {
+            position: fixed;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .side-nav-item {
+            display: block;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(57, 255, 20, 0.1);
+            border: 1px solid #39ff14;
+            border-left: 3px solid #ff0a54;
+            color: #39ff14;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .side-nav-item::before {
+            content: '> ';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .side-nav-item:hover {
+            background: rgba(57, 255, 20, 0.2);
+            border-left-width: 5px;
+            padding-left: 25px;
+        }
+
+        .side-nav-item:hover::before {
+            opacity: 1;
+        }
+
+        /* Terminal Window */
+        .terminal-window {
+            position: relative;
+            z-index: 2;
+            margin: 80px 30px 30px 200px;
+        }
+
+        .terminal-header {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid #39ff14;
+            border-bottom: none;
+            padding: 10px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid #39ff14;
+        }
+
+        .terminal-button.red { background: #ff0a54; border-color: #ff0a54; }
+        .terminal-button.yellow { background: #ffb703; border-color: #ffb703; }
+        .terminal-button.green { background: #39ff14; border-color: #39ff14; }
+
+        .terminal-title {
+            margin-left: 10px;
+            color: #39ff14;
+            font-size: 12px;
+        }
+
+        .terminal-content {
+            background: rgba(13, 2, 8, 0.95);
+            border: 1px solid #39ff14;
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        /* Hero Section */
+        .hero-terminal {
+            margin-bottom: 50px;
+        }
+
+        .prompt {
+            color: #ff0a54;
+            margin-bottom: 20px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #39ff14;
+            animation: cursorBlink 1s infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .typing-text {
+            font-size: 48px;
+            color: #39ff14;
+            text-shadow: 0 0 20px #39ff14;
+            margin-bottom: 20px;
+            border-left: 3px solid #ff0a54;
+            padding-left: 20px;
+        }
+
+        .subtitle-terminal {
+            font-size: 20px;
+            color: #ffb703;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .description-terminal {
+            font-size: 16px;
+            color: #778da9;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+
+        /* ASCII Art Border */
+        .ascii-border {
+            border: 2px solid #39ff14;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .ascii-border::before {
+            content: '╔════════════════════════════════════════════════════════════════╗';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            background: #0d0208;
+            color: #39ff14;
+            font-size: 10px;
+        }
+
+        .ascii-border::after {
+            content: '╚════════════════════════════════════════════════════════════════╝';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            right: 0;
+            background: #0d0208;
+            color: #39ff14;
+            font-size: 10px;
+        }
+
+        /* Command Button */
+        .cmd-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid #39ff14;
+            color: #39ff14;
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .cmd-button::before {
+            content: '> ';
+        }
+
+        .cmd-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #39ff14;
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .cmd-button:hover {
+            color: #0d0208;
+            text-shadow: none;
+        }
+
+        .cmd-button:hover::after {
+            left: 0;
+        }
+
+        /* Feature Blocks */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature-block {
+            background: rgba(26, 26, 46, 0.5);
+            border: 1px solid #39ff14;
+            padding: 25px;
+            position: relative;
+        }
+
+        .feature-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff0a54, #ffb703);
+        }
+
+        .feature-number {
+            color: #ff0a54;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            color: #39ff14;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .feature-text {
+            color: #778da9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Radar Scan */
+        .radar-container {
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            border: 2px solid #39ff14;
+            border-radius: 50%;
+            z-index: 1000;
+            background: rgba(13, 2, 8, 0.9);
+        }
+
+        .radar-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #39ff14);
+            transform-origin: 0% 50%;
+            animation: radarScan 3s linear infinite;
+        }
+
+        @keyframes radarScan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .radar-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ff0a54;
+            border-radius: 50%;
+            animation: radarPing 3s infinite;
+        }
+
+        @keyframes radarPing {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Data Stream */
+        .data-stream {
+            position: fixed;
+            right: 30px;
+            top: 100px;
+            font-size: 10px;
+            color: #39ff14;
+            opacity: 0.3;
+            z-index: 1;
+            max-width: 150px;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .terminal-window { margin: 80px 10px 10px 10px; }
+            .side-nav { display: none; }
+            .radar-container { display: none; }
+            .typing-text { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+
+    <div class="hud-frame">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="logo-terminal">[AURA_SYSTEM]</span>
+        </div>
+        <div class="status-item">
+            <div class="status-indicator"></div>
+            <span>ONLINE</span>
+        </div>
+        <div class="status-item">
+            <span>CPU: 24%</span>
+            <span>|</span>
+            <span>MEM: 1.2GB</span>
+            <span>|</span>
+            <span>DEVICES: 42</span>
+        </div>
+    </div>
+
+    <nav class="side-nav">
+        <a href="#init" class="side-nav-item">init</a>
+        <a href="#features" class="side-nav-item">features</a>
+        <a href="#ecosystem" class="side-nav-item">ecosystem</a>
+        <a href="#pricing" class="side-nav-item">pricing</a>
+        <a href="#contact" class="side-nav-item">contact</a>
+    </nav>
+
+    <div class="data-stream" id="dataStream"></div>
+
+    <div class="radar-container">
+        <div class="radar-line"></div>
+        <div class="radar-dot" style="top: 30%; left: 60%;"></div>
+        <div class="radar-dot" style="top: 70%; left: 40%; animation-delay: 1s;"></div>
+        <div class="radar-dot" style="top: 50%; left: 80%; animation-delay: 2s;"></div>
+    </div>
+
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-button red"></div>
+            <div class="terminal-button yellow"></div>
+            <div class="terminal-button green"></div>
+            <span class="terminal-title">aura@home:~$</span>
+        </div>
+
+        <div class="terminal-content">
+            <div class="hero-terminal">
+                <div class="prompt">root@aura:~$ ./initialize_system</div>
+                <h1 class="typing-text">AURA SYSTEM v4.0</h1>
+                <p class="subtitle-terminal">> Интеллектуальный Оркестратор Умного Дома</p>
+                <p class="description-terminal">
+                    [INFO] Система инициализирована успешно<br>
+                    [INFO] AI-модуль загружен и готов к работе<br>
+                    [INFO] Подключено устройств: 42<br>
+                    [INFO] Готов принимать команды естественного языка<br><br>
+                    
+                    Революционная платформа управления умным домом, которая превращает 
+                    фрагментированную экосистему в единый разумный организм. Используя 
+                    передовые технологии искусственного интеллекта, AURA понимает контекст, 
+                    адаптируется к вашим привычкам и принимает разумные решения.
+                </p>
+                <a href="#" class="cmd-button">execute: start_demo</a>
+            </div>
+
+            <div class="ascii-border">
+                <div class="prompt">> ./show_capabilities</div>
+                <div class="feature-grid">
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_01]</div>
+                        <div class="feature-title">AI Core Engine</div>
+                        <div class="feature-text">
+                            Мощный языковой модель (LLM) анализирует контекст, понимает 
+                            намерения и создаёт оптимальные сценарии в реальном времени.
+                        </div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_02]</div>
+                        <div class="feature-title">Natural Language I/O</div>
+                        <div class="feature-text">
+                            Общайтесь с домом естественным языком. Система понимает контекст 
+                            и нюансы, без необходимости запоминать команды.
+                        </div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_03]</div>
+                        <div class="feature-title">Unified Ecosystem</div>
+                        <div class="feature-text">
+                            Объединяет устройства от разных производителей в единую систему. 
+                            Все компоненты работают синхронно и координированно.
+                        </div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_04]</div>
+                        <div class="feature-title">Cloud + Edge Deploy</div>
+                        <div class="feature-text">
+                            AURA Cloud для максимальной производительности или AURA Edge 
+                            для полной приватности и локального контроля данных.
+                        </div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_05]</div>
+                        <div class="feature-title">Adaptive Learning</div>
+                        <div class="feature-text">
+                            Система учится на ваших предпочтениях и паттернах поведения, 
+                            становясь умнее с каждым днём использования.
+                        </div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-number">[MODULE_06]</div>
+                        <div class="feature-title">Proactive Intelligence</div>
+                        <div class="feature-text">
+                            AURA не ждёт команд — она предвидит потребности и действует 
+                            на опережение, обеспечивая ваш комфорт.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt" style="margin-top: 50px;">> ./deployment_status</div>
+            <p class="description-terminal">
+                [SYSTEM] MVP в активной разработке (Q1 2026)<br>
+                [STATUS] Базовый оркестратор: 78% complete<br>
+                [STATUS] AI-модуль: интеграция с LLM/VLM в процессе<br>
+                [STATUS] Поддержка устройств: климат, освещение, безопасность<br>
+                [INFO] Планируется поддержка Matter, HomeKit (Q2-Q3 2026)<br><br>
+                
+                Присоединяйтесь к революции в управлении умным домом.<br>
+                Система готова к партнёрской интеграции.
+            </p>
+
+            <div style="margin-top: 30px;">
+                <a href="#" class="cmd-button">connect: schedule_demo</a>
+                <a href="#" class="cmd-button" style="margin-left: 20px;">access: sdk</a>
+            </div>
+
+            <div class="prompt" style="margin-top: 50px;">
+                root@aura:~$ <span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01アイウエオカキクケコサシスセソタチツテト';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(13, 2, 8, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#39ff14';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Data Stream
+        const dataStream = document.getElementById('dataStream');
+        const streamData = [
+            '0x7F3A2C01',
+            '0x9E4B1F82',
+            '0x2D8C3E45',
+            '0xA1F7B923',
+            '0x5C2E9D14'
+        ];
+        
+        function updateDataStream() {
+            const randomData = streamData[Math.floor(Math.random() * streamData.length)];
+            dataStream.innerHTML += randomData + '<br>';
+            if (dataStream.children.length > 20) {
+                dataStream.removeChild(dataStream.firstChild);
+            }
+        }
+
+        setInterval(updateDataStream, 500);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
