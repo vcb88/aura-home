@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Интеллектуальный Дом Нового Поколения</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0D0208;
+            color: #F8F9FA;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        @keyframes rain {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes orangeGlow {
+            0%, 100% { text-shadow: 0 0 20px #FF6B35, 0 0 40px #FF6B35; }
+            50% { text-shadow: 0 0 30px #FF6B35, 0 0 60px #FF6B35, 0 0 80px #6A0572; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .rain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .rain {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(transparent, #FF6B35);
+            animation: rain 3s linear infinite;
+            opacity: 0.3;
+        }
+
+        .scanline {
+            position: fixed;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 107, 53, 0.1);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        header {
+            padding: 40px 0;
+            background: rgba(13, 2, 8, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #FF6B35;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo {
+            font-size: 56px;
+            font-weight: 900;
+            color: #FF6B35;
+            letter-spacing: 8px;
+            animation: orangeGlow 4s ease-in-out infinite;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0;
+            background: 
+                radial-gradient(ellipse at top, rgba(106, 5, 114, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(255, 107, 53, 0.2) 0%, transparent 50%);
+        }
+
+        h1 {
+            font-size: 82px;
+            font-weight: 900;
+            color: #FF6B35;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
+            letter-spacing: -2px;
+        }
+
+        .tagline {
+            font-size: 32px;
+            color: #6A0572;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .hero-description {
+            font-size: 22px;
+            color: #C9ADA7;
+            max-width: 700px;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 25px 60px;
+            background: linear-gradient(135deg, #FF6B35 0%, #6A0572 100%);
+            color: #FFF;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 900;
+            border: none;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 107, 53, 0.6);
+        }
+
+        section {
+            padding: 150px 0;
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #FF6B35, transparent);
+        }
+
+        h2 {
+            font-size: 64px;
+            color: #FF6B35;
+            margin-bottom: 80px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 24px;
+            color: #6A0572;
+            margin-bottom: 60px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .problem-list {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .problem-item {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(106, 5, 114, 0.1) 100%);
+            padding: 50px;
+            border-left: 6px solid #FF6B35;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .problem-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 107, 53, 0.05);
+            transition: width 0.4s ease;
+        }
+
+        .problem-item:hover::after {
+            width: 100%;
+        }
+
+        .problem-item:hover {
+            border-left-color: #6A0572;
+            transform: translateX(20px);
+            box-shadow: -20px 0 60px rgba(255, 107, 53, 0.3);
+        }
+
+        .problem-item h3 {
+            font-size: 34px;
+            color: #FF6B35;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .problem-item p {
+            font-size: 20px;
+            color: #C9ADA7;
+            line-height: 1.8;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px;
+        }
+
+        .solution-card {
+            background: rgba(13, 2, 8, 0.9);
+            padding: 60px 40px;
+            border: 2px solid #6A0572;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #FF6B35, #6A0572);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            border-color: transparent;
+            transform: scale(1.05);
+        }
+
+        .solution-icon {
+            font-size: 72px;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .solution-card h3 {
+            font-size: 30px;
+            color: #FF6B35;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .solution-card p {
+            font-size: 18px;
+            color: #C9ADA7;
+            line-height: 1.8;
+        }
+
+        .scenarios {
+            background: linear-gradient(180deg, rgba(255, 107, 53, 0.05) 0%, rgba(106, 5, 114, 0.05) 100%);
+        }
+
+        .scenario-card {
+            background: rgba(13, 2, 8, 0.95);
+            padding: 60px;
+            margin-bottom: 40px;
+            border-top: 4px solid #6A0572;
+            border-bottom: 4px solid #FF6B35;
+            transition: all 0.4s ease;
+        }
+
+        .scenario-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 80px rgba(255, 107, 53, 0.4);
+        }
+
+        .scenario-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #FF6B35, #6A0572);
+            color: #FFF;
+            font-size: 16px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scenario-card h3 {
+            font-size: 38px;
+            color: #FF6B35;
+            margin-bottom: 25px;
+            font-weight: 900;
+        }
+
+        .scenario-card p {
+            font-size: 20px;
+            color: #C9ADA7;
+            line-height: 1.9;
+            font-style: italic;
+        }
+
+        .pricing-section {
+            background: 
+                radial-gradient(ellipse at center, rgba(106, 5, 114, 0.2) 0%, transparent 70%);
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 50px;
+        }
+
+        .pricing-card {
+            background: rgba(13, 2, 8, 0.95);
+            padding: 60px 40px;
+            border: 3px solid #6A0572;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.highlight {
+            border-color: #FF6B35;
+            transform: scale(1.08);
+            box-shadow: 0 30px 80px rgba(255, 107, 53, 0.5);
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.12);
+        }
+
+        .pricing-card h3 {
+            font-size: 38px;
+            color: #FF6B35;
+            margin-bottom: 30px;
+            font-weight: 900;
+        }
+
+        .pricing-value {
+            font-size: 56px;
+            color: #FFF;
+            font-weight: 900;
+            margin-bottom: 40px;
+        }
+
+        .pricing-value span {
+            font-size: 24px;
+            color: #C9ADA7;
+        }
+
+        .pricing-list {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .pricing-list li {
+            padding: 15px 0;
+            color: #C9ADA7;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .pricing-list li:before {
+            content: '▸ ';
+            color: #FF6B35;
+            font-weight: 900;
+        }
+
+        footer {
+            background: rgba(13, 2, 8, 0.98);
+            padding: 100px 0 50px;
+            text-align: center;
+            border-top: 3px solid #FF6B35;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .contact-card {
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(106, 5, 114, 0.1));
+            border: 2px solid #6A0572;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: #FF6B35;
+            transform: translateY(-10px);
+        }
+
+        .contact-card a {
+            color: #FF6B35;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1024px) {
+            .solution-grid, .pricing-container {
+                grid-template-columns: 1fr;
+            }
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 48px; }
+            h2 { font-size: 36px; }
+            .container { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="rain-container" id="rainContainer"></div>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">AURA</div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <div class="tagline">// SYSTEM INITIATED</div>
+                <h1>Интеллектуальный<br>Дом Нового<br>Поколения</h1>
+                <p class="hero-description">
+                    В мире, где технологии проникают в каждый аспект жизни, 
+                    ваш дом становится разумным партнером. AURA — это будущее, 
+                    которое понимает вас.
+                </p>
+                <a href="#contact" class="cta-button">Войти в систему</a>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-subtitle">// ERROR: CURRENT SYSTEMS FAILING</div>
+            <h2>Технический Тупик</h2>
+            <div class="problem-list">
+                <div class="problem-item">
+                    <h3>Изолированные протоколы</h3>
+                    <p>Зоопарк несовместимых стандартов. Вы тратите ресурсы на поддержку вместо инноваций. Это архитектурная ошибка, которая стоит вам денег.</p>
+                </div>
+                <div class="problem-item">
+                    <h3>Жесткие сценарии</h3>
+                    <p>Системы на правилах достигают предела сложности. Каждое новое устройство — экспоненциальный рост проблем. Масштабирование невозможно.</p>
+                </div>
+                <div class="problem-item">
+                    <h3>Примитивные API</h3>
+                    <p>Команды "включить/выключить" — это прошлый век. Ваши устройства имеют потенциал, но архитектура его ограничивает.</p>
+                </div>
+                <div class="problem-item">
+                    <h3>Облачная зависимость</h3>
+                    <p>Единая точка отказа. Когда падает интернет, падает вся система. Пользователи теряют доверие.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-subtitle">// SYSTEM UPGRADE AVAILABLE</div>
+            <h2>Революция AURA</h2>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <span class="solution-icon">🧠</span>
+                    <h3>Искусственный интеллект</h3>
+                    <p>Мощная языковая модель в ядре системы. Понимание естественного языка, контекста, намерений. Разумные решения вместо жестких правил.</p>
+                </div>
+                <div class="solution-card">
+                    <span class="solution-icon">🔗</span>
+                    <h3>Единая экосистема</h3>
+                    <p>Все устройства работают как единый организм. Обмен данными, координация действий, достижение общих целей.</p>
+                </div>
+                <div class="solution-card">
+                    <span class="solution-icon">💬</span>
+                    <h3>Естественный диалог</h3>
+                    <p>Общайтесь с домом на человеческом языке. Система понимает намерения, не требуя точных команд.</p>
+                </div>
+                <div class="solution-card">
+                    <span class="solution-icon">⚡</span>
+                    <h3>Гибридная архитектура</h3>
+                    <p>Облако для максимальной мощности. Локальное исполнение для приватности. Полная автономность без интернета.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="scenarios">
+            <div class="section-subtitle">// REAL WORLD SCENARIOS</div>
+            <h2>Сценарии использования</h2>
+            
+            <div class="scenario-card">
+                <div class="scenario-badge">Проактивность</div>
+                <h3>Забота о вашем сне</h3>
+                <p>
+                    "Доброе утро. Ночью я зафиксировала повышенный CO₂ в спальне. 
+                    Качество вашего сна было нарушено. Рекомендую автоматическое проветривание 
+                    перед сном. Активировать протокол?"
+                </p>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-badge">Предиктивность</div>
+                <h3>Техническое обслуживание</h3>
+                <p>
+                    "Обнаружена аномалия. Стиральная машина потребляет на 23% больше энергии. 
+                    Диагностика указывает на засорение фильтра. Предлагаю видео-инструкцию 
+                    по обслуживанию."
+                </p>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-badge">Безопасность</div>
+                <h3>Протокол защиты</h3>
+                <p>
+                    "ВНИМАНИЕ: Зафиксировано несанкционированное движение. Протокол безопасности 
+                    активирован. Освещение включено. Имитация присутствия запущена. 
+                    Видеопоток передан на ваше устройство."
+                </p>
+            </div>
+        </section>
+
+        <section class="pricing-section">
+            <div class="section-subtitle">// CHOOSE YOUR PATH</div>
+            <h2>Тарифные планы</h2>
+            <div class="pricing-container">
+                <div class="pricing-card">
+                    <h3>AURA Cloud</h3>
+                    <div class="pricing-value">$19<span>/месяц</span></div>
+                    <ul class="pricing-list">
+                        <li>Облачные LLM</li>
+                        <li>Неограниченные запросы</li>
+                        <li>Облачное хранилище</li>
+                        <li>Автообновления</li>
+                        <li>Техподдержка 24/7</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Выбрать</a>
+                </div>
+
+                <div class="pricing-card highlight">
+                    <h3>AURA Edge Ultra</h3>
+                    <div class="pricing-value">$999<span> единоразово</span></div>
+                    <ul class="pricing-list">
+                        <li>Локальный сервер</li>
+                        <li>Абсолютная приватность</li>
+                        <li>Максимальная мощность</li>
+                        <li>Работа без интернета</li>
+                        <li>Приоритетная поддержка</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Выбрать</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>AURA Edge</h3>
+                    <div class="pricing-value">Free<span>mium</span></div>
+                    <ul class="pricing-list">
+                        <li>Open source ядро</li>
+                        <li>Свой сервер</li>
+                        <li>Локальные LLM</li>
+                        <li>Базовые функции</li>
+                        <li>Платные расширения</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Начать</a>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="section-subtitle">// CONNECT WITH US</div>
+            <h2>Контакты</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <a href="https://aurahome.tech">🌐 Website</a>
+                </div>
+                <div class="contact-card">
+                    <a href="mailto:hello@aurahome.tech">📧 Email</a>
+                </div>
+                <div class="contact-card">
+                    <a href="https://github.com/vcb88/aura-home">💻 GitHub</a>
+                </div>
+                <div class="contact-card">
+                    <a href="https://t.me/aurahome">💬 Telegram</a>
+                </div>
+            </div>
+            <p style="color: #C9ADA7; margin-top: 50px; font-size: 18px;">
+                © 2025 AURA // Будущее умного дома начинается здесь
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Create rain effect
+        const rainContainer = document.getElementById('rainContainer');
+        for (let i = 0; i < 50; i++) {
+            const rain = document.createElement('div');
+            rain.className = 'rain';
+            rain.style.left = Math.random() * 100 + '%';
+            rain.style.animationDelay = Math.random() * 3 + 's';
+            rain.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            rainContainer.appendChild(rain);
+        }
+    </script>
+</body>
+</html>
