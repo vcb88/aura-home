@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Dark Future Minimal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1e1e1e;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Smooth Gradient Background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(94, 154, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 51, 51, 0.08) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        /* Metallic texture overlay */
+        .texture-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(176, 196, 222, 0.02) 2px,
+                rgba(176, 196, 222, 0.02) 4px
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(94, 154, 255, 0.1);
+        }
+
+        .logo-minimal {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #5e9aff;
+            position: relative;
+        }
+
+        .logo-minimal::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #ff3333;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 50px;
+        }
+
+        .nav-menu a {
+            color: #b0c4de;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #5e9aff;
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #5e9aff;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(94, 154, 255, 0.3);
+            border-radius: 50%;
+            margin: 30px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .progress-dot.active {
+            background: #5e9aff;
+            box-shadow: 0 0 20px rgba(94, 154, 255, 0.5);
+        }
+
+        .progress-dot:hover {
+            transform: scale(1.5);
+            background: #5e9aff;
+        }
+
+        .progress-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #b0c4de;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .progress-dot:hover::after {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero-minimal {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 80px;
+            z-index: 2;
+        }
+
+        .hero-content-minimal {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: #5e9aff;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .hero-title-minimal {
+            font-size: 120px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffffff 0%, #5e9aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .hero-subtitle-minimal {
+            font-size: 32px;
+            font-weight: 300;
+            color: #b0c4de;
+            margin-bottom: 50px;
+            line-height: 1.4;
+        }
+
+        .hero-description-minimal {
+            font-size: 18px;
+            font-weight: 300;
+            color: #778da9;
+            line-height: 1.8;
+            margin-bottom: 60px;
+            max-width: 700px;
+        }
+
+        .minimal-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 45px;
+            background: transparent;
+            border: 1px solid #5e9aff;
+            color: #5e9aff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .minimal-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #5e9aff;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .minimal-button:hover {
+            color: #1e1e1e;
+            border-color: #5e9aff;
+        }
+
+        .minimal-button:hover::before {
+            left: 0;
+        }
+
+        .minimal-button-arrow {
+            transition: transform 0.4s;
+        }
+
+        .minimal-button:hover .minimal-button-arrow {
+            transform: translateX(5px);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(94, 154, 255, 0.2);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .floating-element-1 {
+            top: 10%;
+            right: 15%;
+            animation-delay: 0s;
+        }
+
+        .floating-element-2 {
+            bottom: 20%;
+            right: 10%;
+            width: 200px;
+            height: 200px;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        /* Section */
+        .section-minimal {
+            position: relative;
+            min-height: 100vh;
+            padding: 150px 80px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: #5e9aff;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .section-title-minimal {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: #ffffff;
+            max-width: 800px;
+        }
+
+        .section-description {
+            font-size: 20px;
+            font-weight: 300;
+            color: #778da9;
+            line-height: 1.8;
+            margin-bottom: 80px;
+            max-width: 700px;
+        }
+
+        /* Asymmetric Grid */
+        .features-asymmetric {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .feature-minimal {
+            padding: 50px 0;
+            border-top: 1px solid rgba(94, 154, 255, 0.2);
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .feature-minimal::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #5e9aff;
+            transition: width 0.4s;
+        }
+
+        .feature-minimal:hover::before {
+            width: 100px;
+        }
+
+        .feature-number {
+            font-size: 14px;
+            color: #5e9aff;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .feature-title-minimal {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .feature-text-minimal {
+            font-size: 16px;
+            font-weight: 300;
+            color: #778da9;
+            line-height: 1.7;
+        }
+
+        .feature-minimal:hover {
+            transform: translateX(10px);
+        }
+
+        /* Large Feature */
+        .feature-large {
+            grid-column: span 2;
+            padding: 80px;
+            background: rgba(45, 45, 45, 0.3);
+            border: 1px solid rgba(94, 154, 255, 0.1);
+            margin-top: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-large-title {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        .feature-large-text {
+            font-size: 18px;
+            font-weight: 300;
+            color: #778da9;
+            line-height: 1.8;
+            max-width: 900px;
+        }
+
+        /* Pulse Dots */
+        .pulse-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ff3333;
+            border-radius: 50%;
+            animation: pulseGrow 3s infinite;
+        }
+
+        @keyframes pulseGrow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.8;
+                box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.7);
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+                box-shadow: 0 0 0 20px rgba(255, 51, 51, 0);
+            }
+        }
+
+        /* Video Divider */
+        .video-divider {
+            position: relative;
+            height: 100vh;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .video-text {
+            position: relative;
+            z-index: 2;
+            font-size: 64px;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 30px; }
+            .hero-minimal { padding: 0 30px; }
+            .hero-title-minimal { font-size: 48px; }
+            .section-minimal { padding: 80px 30px; }
+            .section-title-minimal { font-size: 36px; }
+            .features-asymmetric { grid-template-columns: 1fr; }
+            .progress-indicator { display: none; }
+            .feature-large { grid-column: span 1; padding: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="texture-overlay"></div>
+
+    <nav>
+        <div class="logo-minimal">AURA</div>
+        <div class="nav-menu">
+            <a href="#intro">Введение</a>
+            <a href="#features">Возможности</a>
+            <a href="#ecosystem">Экосистема</a>
+            <a href="#pricing">Тарифы</a>
+            <a href="#contact">Контакт</a>
+        </div>
+    </nav>
+
+    <div class="progress-indicator">
+        <div class="progress-dot active" data-label="Начало"></div>
+        <div class="progress-dot" data-label="Возможности"></div>
+        <div class="progress-dot" data-label="Экосистема"></div>
+        <div class="progress-dot" data-label="Тарифы"></div>
+        <div class="progress-dot" data-label="Контакт"></div>
+    </div>
+
+    <section class="hero-minimal">
+        <div class="floating-element floating-element-1"></div>
+        <div class="floating-element floating-element-2"></div>
+        <div class="pulse-dot" style="top: 20%; right: 25%;"></div>
+        <div class="pulse-dot" style="bottom: 30%; right: 15%; animation-delay: 1s;"></div>
+
+        <div class="hero-content-minimal">
+            <div class="hero-label">Система Нового Поколения</div>
+            <h1 class="hero-title-minimal">AURA</h1>
+            <h2 class="hero-subtitle-minimal">
+                Интеллектуальный оркестратор<br>
+                для управления умным домом
+            </h2>
+            <p class="hero-description-minimal">
+                Трансформируем способ взаимодействия с домом через искусственный интеллект, 
+                проактивность и естественный язык. Единая экосистема, где все устройства 
+                работают как единый разумный организм.
+            </p>
+            <a href="#" class="minimal-button">
+                Начать
+                <span class="minimal-button-arrow">→</span>
+            </a>
+        </div>
+    </section>
+
+    <div class="video-divider">
+        <div class="video-overlay"></div>
+        <div class="video-text">От команд к заботе</div>
+    </div>
+
+    <section class="section-minimal" id="features">
+        <div class="section-content">
+            <div class="section-label">Ключевые возможности</div>
+            <h2 class="section-title-minimal">Революция в управлении домом</h2>
+            <p class="section-description">
+                AURA — это не просто система автоматизации. Это интеллектуальная платформа, 
+                которая превращает ваш дом в по-настоящему разумную среду.
+            </p>
+
+            <div class="features-asymmetric">
+                <div class="feature-minimal">
+                    <div class="feature-number">01</div>
+                    <h3 class="feature-title-minimal">Искусственный интеллект в центре</h3>
+                    <p class="feature-text-minimal">
+                        Мощный языковой модель понимает контекст, намерения и создаёт 
+                        оптимальные сценарии на лету.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">02</div>
+                    <h3 class="feature-title-minimal">Естественное взаимодействие</h3>
+                    <p class="feature-text-minimal">
+                        Говорите с домом на естественном языке. Никаких жёстких команд — 
+                        просто выразите своё желание.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">03</div>
+                    <h3 class="feature-title-minimal">Единая экосистема</h3>
+                    <p class="feature-text-minimal">
+                        Все устройства от разных производителей работают вместе, 
+                        координируя действия для общих целей.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">04</div>
+                    <h3 class="feature-title-minimal">Облако и локально</h3>
+                    <p class="feature-text-minimal">
+                        AURA Cloud для максимальной производительности. AURA Edge 
+                        для полной приватности и контроля.
+                    </p>
+                </div>
+
+                <div class="feature-large">
+                    <h3 class="feature-large-title">Адаптивное обучение и проактивность</h3>
+                    <p class="feature-large-text">
+                        Система запоминает ваши предпочтения, привычки и паттерны поведения. 
+                        Со временем AURA становится всё лучше в предсказании потребностей 
+                        и автоматизации рутинных задач. Она не ждёт команд — действует 
+                        на опережение, заботясь о вашем комфорте.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-minimal">
+        <div class="section-content">
+            <div class="section-label">Широкая совместимость</div>
+            <h2 class="section-title-minimal">Экосистема устройств</h2>
+            <p class="section-description">
+                AURA поддерживает широкий спектр датчиков и устройств для умного дома, 
+                объединяя их в единую интеллектуальную систему.
+            </p>
+
+            <div class="features-asymmetric">
+                <div class="feature-minimal">
+                    <div class="feature-number">Климат</div>
+                    <h3 class="feature-title-minimal">Контроль микроклимата</h3>
+                    <p class="feature-text-minimal">
+                        Термостаты, кондиционеры, датчики температуры и влажности, 
+                        системы вентиляции.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">Освещение</div>
+                    <h3 class="feature-title-minimal">Умное освещение</h3>
+                    <p class="feature-text-minimal">
+                        Лампочки RGB, датчики движения, системы управления шторами, 
+                        декоративное освещение.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">Безопасность</div>
+                    <h3 class="feature-title-minimal">Защита дома</h3>
+                    <p class="feature-text-minimal">
+                        Умные замки, видеокамеры, датчики открытия дверей, 
+                        системы сигнализации.
+                    </p>
+                </div>
+
+                <div class="feature-minimal">
+                    <div class="feature-number">Энергия</div>
+                    <h3 class="feature-title-minimal">Энергоэффективность</h3>
+                    <p class="feature-text-minimal">
+                        Умные счётчики, розетки, выключатели, 
+                        управление солнечными панелями.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 80px;">
+                <a href="#" class="minimal-button">
+                    Узнать больше
+                    <span class="minimal-button-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="video-divider">
+        <div class="video-overlay"></div>
+        <div class="video-text">Готовы к будущему?</div>
+    </div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Progress indicator
+        const progressDots = document.querySelectorAll('.progress-dot');
+        const sections = document.querySelectorAll('section, .video-divider');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            progressDots.forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (pageYOffset < 500 && index === 0) {
+                    dot.classList.add('active');
+                } else if (pageYOffset >= 500 && index === Math.min(Math.floor(pageYOffset / 1000), progressDots.length - 1)) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const elements = document.querySelectorAll('.floating-element');
+            elements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.2);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
