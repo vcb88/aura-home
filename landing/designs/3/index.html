@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Holographic Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Holographic Background */
+        .holo-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #0a1628 0%, #000000 100%);
+            z-index: 0;
+        }
+
+        .light-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .light-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #4dd0e1, transparent);
+            border-radius: 50%;
+            animation: floatLight 20s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        @keyframes floatLight {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(100px, -100px); }
+            50% { transform: translate(200px, 100px); }
+            75% { transform: translate(-100px, 50px); }
+        }
+
+        /* Radial Navigation */
+        .radial-nav {
+            position: fixed;
+            top: 50px;
+            right: 50px;
+            width: 200px;
+            height: 200px;
+            z-index: 1000;
+        }
+
+        .nav-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #4dd0e1, #26c6da);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #4dd0e1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px #4dd0e1; }
+            50% { box-shadow: 0 0 50px #4dd0e1, 0 0 70px #4dd0e1; }
+        }
+
+        .nav-item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(77, 208, 225, 0.2);
+            border: 2px solid #4dd0e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(77, 208, 225, 0.5);
+            transform: scale(1.2);
+            box-shadow: 0 0 20px #4dd0e1;
+        }
+
+        /* Logo */
+        .logo {
+            position: fixed;
+            top: 30px;
+            left: 50px;
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4dd0e1, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: 1000;
+            letter-spacing: 3px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            width: 100%;
+            padding: 0 50px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #4dd0e1, #26c6da, #4dd0e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: #26c6da;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #b0c4de;
+            margin-bottom: 40px;
+        }
+
+        .holo-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #4dd0e1, #26c6da);
+            color: #000000;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 30px;
+            box-shadow: 0 0 30px rgba(77, 208, 225, 0.5);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holo-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .holo-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .holo-button:hover {
+            box-shadow: 0 0 50px rgba(77, 208, 225, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* AI Avatar */
+        .ai-avatar {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .avatar-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid #4dd0e1;
+            animation: rotateCircle 20s linear infinite;
+        }
+
+        .avatar-circle:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            border-color: #4dd0e1;
+            opacity: 0.3;
+        }
+
+        .avatar-circle:nth-child(2) {
+            width: 320px;
+            height: 320px;
+            border-color: #26c6da;
+            opacity: 0.5;
+            animation-duration: 15s;
+            animation-direction: reverse;
+        }
+
+        .avatar-circle:nth-child(3) {
+            width: 240px;
+            height: 240px;
+            border-color: #ffd700;
+            opacity: 0.7;
+            animation-duration: 10s;
+        }
+
+        @keyframes rotateCircle {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .avatar-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #4dd0e1, #26c6da);
+            border-radius: 50%;
+            box-shadow: 0 0 60px #4dd0e1, 0 0 100px #26c6da;
+            animation: pulse 2s infinite;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid #4dd0e1;
+        }
+
+        /* Horizontal Scroll Sections */
+        .scroll-container {
+            position: relative;
+            z-index: 2;
+            padding: 100px 0;
+        }
+
+        .section-wrapper {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 50px;
+            padding: 0 50px;
+            scrollbar-width: thin;
+            scrollbar-color: #4dd0e1 transparent;
+        }
+
+        .section-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .section-wrapper::-webkit-scrollbar-track {
+            background: rgba(77, 208, 225, 0.1);
+        }
+
+        .section-wrapper::-webkit-scrollbar-thumb {
+            background: #4dd0e1;
+            border-radius: 10px;
+        }
+
+        .holo-section {
+            min-width: 800px;
+            scroll-snap-align: center;
+            background: rgba(10, 22, 40, 0.6);
+            border: 2px solid rgba(77, 208, 225, 0.3);
+            border-radius: 20px;
+            padding: 60px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holo-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #4dd0e1, #26c6da, #4dd0e1);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .holo-section:hover::before {
+            opacity: 0.3;
+        }
+
+        .section-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 72px;
+            font-weight: bold;
+            color: rgba(77, 208, 225, 0.1);
+        }
+
+        .section-title {
+            font-size: 42px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #4dd0e1, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #b0c4de;
+        }
+
+        /* Device Cards */
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .device-card {
+            background: rgba(77, 208, 225, 0.1);
+            border: 1px solid #4dd0e1;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #4dd0e1, transparent);
+            animation: scanDevice 2s infinite;
+        }
+
+        @keyframes scanDevice {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .device-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(77, 208, 225, 0.3);
+            border-color: #ffd700;
+        }
+
+        .device-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .device-name {
+            font-size: 18px;
+            color: #4dd0e1;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero-container { flex-direction: column; padding: 20px; }
+            .ai-avatar { width: 300px; height: 300px; }
+            .hero-title { font-size: 42px; }
+            .radial-nav { display: none; }
+            .holo-section { min-width: 90vw; padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="holo-background"></div>
+    <div class="light-particles" id="lightParticles"></div>
+
+    <div class="logo">AURA</div>
+
+    <div class="radial-nav">
+        <div class="nav-center">☰</div>
+        <div class="nav-item" style="top: 0; left: 50%; transform: translate(-50%, 0);" title="Возможности">1</div>
+        <div class="nav-item" style="top: 30%; right: 0; transform: translate(0, -50%);" title="Экосистема">2</div>
+        <div class="nav-item" style="bottom: 30%; right: 0; transform: translate(0, 50%);" title="Тарифы">3</div>
+        <div class="nav-item" style="bottom: 0; left: 50%; transform: translate(-50%, 0);" title="Партнеры">4</div>
+        <div class="nav-item" style="top: 30%; left: 0; transform: translate(0, -50%);" title="Контакты">5</div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">AURA</h1>
+                <p class="hero-subtitle">Интеллектуальный Оркестратор</p>
+                <p class="hero-description">
+                    Система нового поколения, которая превращает ваш дом в по-настоящему 
+                    разумную среду. Искусственный интеллект, проактивность и естественное 
+                    взаимодействие — всё для вашего комфорта.
+                </p>
+                <a href="#" class="holo-button">Запустить AURA</a>
+            </div>
+
+            <div class="ai-avatar">
+                <div class="avatar-circle"></div>
+                <div class="avatar-circle"></div>
+                <div class="avatar-circle"></div>
+                <div class="avatar-core"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-container">
+        <div class="section-wrapper">
+            <div class="holo-section">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Единая Экосистема</h2>
+                <p class="section-content">
+                    AURA объединяет все устройства от разных производителей в одну согласованную систему. 
+                    Все датчики, актуаторы и устройства работают вместе, обмениваясь информацией и 
+                    координируя свои действия для достижения общих целей.
+                </p>
+                <div class="devices-grid">
+                    <div class="device-card">
+                        <div class="device-icon">🌡️</div>
+                        <div class="device-name">Климат</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">💡</div>
+                        <div class="device-name">Освещение</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">🔒</div>
+                        <div class="device-name">Безопасность</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">📹</div>
+                        <div class="device-name">Камеры</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="holo-section">
+                <span class="section-number">02</span>
+                <h2 class="section-title">AI в Центре</h2>
+                <p class="section-content">
+                    В основе AURA лежит мощная языковая модель (LLM), которая способна понять 
+                    естественный язык, контекст и намерения пользователя. Система анализирует 
+                    данные от датчиков, историю действий и текущую ситуацию, чтобы принимать 
+                    оптимальные решения и создавать комплексные сценарии на лету.
+                </p>
+            </div>
+
+            <div class="holo-section">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Естественное Общение</h2>
+                <p class="section-content">
+                    Вместо жёстких команд вроде "Алиса, включи свет в гостиной на 70%", 
+                    можно сказать: "Мне холодно, я хочу уютную атмосферу для работы". 
+                    AURA поймёт намерение и скоординирует температуру, освещение и другие параметры.
+                </p>
+            </div>
+
+            <div class="holo-section">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Облако и Локально</h2>
+                <p class="section-content">
+                    AURA Cloud использует мощные облачные LLM для максимальной производительности. 
+                    AURA Edge работает локально на вашем оборудовании, обеспечивая полную приватность 
+                    и контроль данных. Выбирайте оптимальное решение для ваших задач.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate light particles
+        const lightContainer = document.getElementById('lightParticles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'light-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            lightContainer.appendChild(particle);
+        }
+
+        // Add rings to avatar
+        const avatar = document.querySelector('.ai-avatar');
+        for (let i = 0; i < 8; i++) {
+            const ring = document.createElement('div');
+            ring.className = 'avatar-ring';
+            const size = 160 + (i * 30);
+            ring.style.width = size + 'px';
+            ring.style.height = size + 'px';
+            ring.style.top = '50%';
+            ring.style.left = '50%';
+            ring.style.transform = 'translate(-50%, -50%)';
+            ring.style.opacity = 0.1 - (i * 0.01);
+            avatar.appendChild(ring);
+        }
+    </script>
+</body>
+</html>
