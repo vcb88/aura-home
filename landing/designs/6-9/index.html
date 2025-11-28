@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Выбор Дизайна</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00f5ff, #ff00de);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: #888;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .option-card {
+            background: #111;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #222;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            border-color: #00f5ff;
+            box-shadow: 0 20px 60px rgba(0, 245, 255, 0.3);
+        }
+
+        .preview-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Вариант 1: Neon Blade Runner */
+        .preview-1 {
+            background: linear-gradient(135deg, #ff006e 0%, #8338ec 50%, #3a86ff 100%);
+            position: relative;
+        }
+
+        .preview-1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 4px);
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Вариант 2: Dark Minimal Cyberpunk */
+        .preview-2 {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            position: relative;
+        }
+
+        .preview-2::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            right: 10%;
+            bottom: 20%;
+            border: 2px solid #00f5ff;
+            border-radius: 10px;
+            box-shadow: 
+                0 0 20px rgba(0, 245, 255, 0.5),
+                inset 0 0 20px rgba(0, 245, 255, 0.2);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Вариант 3: Holographic Grid */
+        .preview-3 {
+            background: 
+                linear-gradient(90deg, transparent 49%, #00f5ff 49%, #00f5ff 51%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, #ff00de 49%, #ff00de 51%, transparent 51%);
+            background-size: 50px 50px;
+            background-color: #0a0a0a;
+            position: relative;
+        }
+
+        .preview-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 30%, #0a0a0a 70%);
+        }
+
+        /* Вариант 4: Love Death Robots Style */
+        .preview-4 {
+            background: linear-gradient(45deg, #ff0040 0%, #ff7700 25%, #ffdd00 50%, #00ff88 75%, #0088ff 100%);
+            position: relative;
+        }
+
+        .preview-4::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, transparent 20%, rgba(0,0,0,0.8) 80%);
+        }
+
+        .option-info {
+            padding: 30px;
+        }
+
+        .option-number {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #00f5ff, #ff00de);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .option-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .option-description {
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features-list li {
+            padding: 8px 0;
+            color: #aaa;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00f5ff;
+            font-weight: bold;
+        }
+
+        .select-button {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00f5ff, #ff00de);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .preview-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Выберите Стиль Лендинга AURA</h1>
+        <p>Каждый вариант представляет уникальную визуальную концепцию, вдохновлённую киберпанк-эстетикой и современным sci-fi дизайном</p>
+    </div>
+
+    <div class="options-grid">
+        <!-- Вариант 1 -->
+        <div class="option-card" onclick="selectDesign(1)">
+            <div class="preview-container preview-1">
+                <div class="preview-image">
+                    <div style="text-align: center; z-index: 10; position: relative;">
+                        <div style="font-size: 72px; font-weight: 900; text-shadow: 0 0 30px rgba(255,255,255,0.8);">AURA</div>
+                        <div style="font-size: 20px; margin-top: 10px; opacity: 0.8;">Neon Dreams</div>
+                    </div>
+                </div>
+            </div>
+            <div class="option-info">
+                <span class="option-number">Вариант 1</span>
+                <h2 class="option-title">Neon Blade Runner</h2>
+                <p class="option-description">
+                    Яркие неоновые градиенты, эффект сканирующих линий и насыщенные цвета. 
+                    Вдохновлён эстетикой Blade Runner 2049 и киберпанк-городов.
+                </p>
+                <ul class="features-list">
+                    <li>Яркие неоновые акценты (розовый, фиолетовый, синий)</li>
+                    <li>Анимированные сканирующие линии</li>
+                    <li>Голографические эффекты</li>
+                    <li>Высокий контраст и драматичность</li>
+                    <li>Футуристичный и энергичный</li>
+                </ul>
+                <button class="select-button">Выбрать этот дизайн</button>
+            </div>
+        </div>
+
+        <!-- Вариант 2 -->
+        <div class="option-card" onclick="selectDesign(2)">
+            <div class="preview-container preview-2">
+                <div class="preview-image">
+                    <div style="text-align: center; z-index: 10; position: relative;">
+                        <div style="font-size: 72px; font-weight: 900; color: #00f5ff; text-shadow: 0 0 40px rgba(0,245,255,0.8);">AURA</div>
+                        <div style="font-size: 20px; margin-top: 10px; color: #888;">Dark Elegance</div>
+                    </div>
+                </div>
+            </div>
+            <div class="option-info">
+                <span class="option-number">Вариант 2</span>
+                <h2 class="option-title">Dark Minimal Cyberpunk</h2>
+                <p class="option-description">
+                    Тёмный минимализм с акцентом на cyan. Элегантный и сдержанный дизайн 
+                    в стиле Black Mirror с пульсирующими световыми элементами.
+                </p>
+                <ul class="features-list">
+                    <li>Тёмная база с cyan акцентами</li>
+                    <li>Минималистичные геометрические формы</li>
+                    <li>Пульсирующее свечение</li>
+                    <li>Элегантный и профессиональный</li>
+                    <li>Фокус на контенте</li>
+                </ul>
+                <button class="select-button">Выбрать этот дизайн</button>
+            </div>
+        </div>
+
+        <!-- Вариант 3 -->
+        <div class="option-card" onclick="selectDesign(3)">
+            <div class="preview-container preview-3">
+                <div class="preview-image">
+                    <div style="text-align: center; z-index: 10; position: relative;">
+                        <div style="font-size: 72px; font-weight: 900; background: linear-gradient(135deg, #00f5ff, #ff00de); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AURA</div>
+                        <div style="font-size: 20px; margin-top: 10px; color: #00f5ff;">Holographic</div>
+                    </div>
+                </div>
+            </div>
+            <div class="option-info">
+                <span class="option-number">Вариант 3</span>
+                <h2 class="option-title">Holographic Grid</h2>
+                <p class="option-description">
+                    Голографическая сетка и цифровые паттерны. Вдохновлён интерфейсами 
+                    из Johnny Mnemonic и Running Man - техно-футуризм 80-90х.
+                </p>
+                <ul class="features-list">
+                    <li>Голографическая сетка и паттерны</li>
+                    <li>Двухцветные градиенты (cyan/magenta)</li>
+                    <li>Ретро-футуризм 80-90х</li>
+                    <li>Цифровая эстетика</li>
+                    <li>Динамичные геометрические элементы</li>
+                </ul>
+                <button class="select-button">Выбрать этот дизайн</button>
+            </div>
+        </div>
+
+        <!-- Вариант 4 -->
+        <div class="option-card" onclick="selectDesign(4)">
+            <div class="preview-container preview-4">
+                <div class="preview-image">
+                    <div style="text-align: center; z-index: 10; position: relative;">
+                        <div style="font-size: 72px; font-weight: 900; color: #fff; text-shadow: 0 0 50px rgba(255,255,255,0.5);">AURA</div>
+                        <div style="font-size: 20px; margin-top: 10px; color: #ffdd00;">Chromatic</div>
+                    </div>
+                </div>
+            </div>
+            <div class="option-info">
+                <span class="option-number">Вариант 4</span>
+                <h2 class="option-title">Love Death Robots Style</h2>
+                <p class="option-description">
+                    Яркие радужные градиенты и хроматические аберрации. Вдохновлён 
+                    стилистикой Love, Death & Robots - смелый и художественный.
+                </p>
+                <ul class="features-list">
+                    <li>Радужные градиенты (полный спектр)</li>
+                    <li>Хроматические аберрации</li>
+                    <li>Художественный и экспрессивный</li>
+                    <li>Игра света и тени</li>
+                    <li>Эмоциональный и запоминающийся</li>
+                </ul>
+                <button class="select-button">Выбрать этот дизайн</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        После выбора будет создан полноценный лендинг с анимациями, интерактивными элементами и адаптивным дизайном
+    </div>
+
+    <script>
+        function selectDesign(designNumber) {
+            const designs = {
+                1: "Neon Blade Runner",
+                2: "Dark Minimal Cyberpunk", 
+                3: "Holographic Grid",
+                4: "Love Death Robots Style"
+            };
+            
+            alert(`Отлично! Вы выбрали вариант ${designNumber}: ${designs[designNumber]}\n\nСейчас я создам полноценный лендинг с этим дизайном!`);
+        }
+    </script>
+</body>
+</html>
